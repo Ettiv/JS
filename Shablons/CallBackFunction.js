@@ -19,7 +19,7 @@ function learnJS (lang, callBack) {
     callBack();
 }
 learnJS("java skript" , function(){
-    console.log('Я прошёл этот урок');
+    console.log('Я прошёл этот урок'); 
 });
 
 
