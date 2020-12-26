@@ -28,11 +28,6 @@ document.querySelector('.promo__adv').remove();
 document.querySelector('.promo__genre').textContent = 'драмма';
 document.querySelector('.promo__bg').style.background = 'url("img/bg.jpg") center center/cover no-repeat';
 const films = document.querySelectorAll('.promo__interactive-item');
-// let i = 0;
-// films.forEach(element => {
-//     element.textContent = movieDB.movies[i];
-//     i++;
-// });
 let i = 0;
 films.forEach(item => {
     item.textContent = `${i+1}.${movieDB.movies[i]}`;
