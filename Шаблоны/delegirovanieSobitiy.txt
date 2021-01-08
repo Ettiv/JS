@@ -1,0 +1,21 @@
+btn.classlist.add('red'); - добовляет класс red
+.remove - удаляет класс
+.togle - меняет текущий
+if (btn.contains('red')){ - проверяет наличие класса
+
+}
+
+const n = document.querySelector('wrapper');
+
+n.addEventListener('click' , (event) => {
+    if(event.target && event.target.tagName == "BUTTON"){
+        ...
+    }
+});
+делегирование событий. мы добваляем обёртке лисенер и потом у кнопок проверяем,есть ли у них нужный тэг и 
+в этом случае будут выполняться только кнопки(в том числе и новоприбывшие),а не вся обёртка.
+n.addEventListener('click' , (event) => {
+    if(event.target && event.target.matches("button.red")){
+        ...
+    }
+});
