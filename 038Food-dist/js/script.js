@@ -91,8 +91,7 @@ window.addEventListener('DOMContentLoaded', () => {
     //modal
 
     const modalTrigger = document.querySelectorAll('[data-modal]'),
-          modal = document.querySelector('.modal'),
-          modalCloseBtn = document.querySelector("[data-close]"); 
+          modal = document.querySelector('.modal'); 
 
     function openModal(){
             modal.classList.add("show");
@@ -113,10 +112,10 @@ window.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = "";
     }
 
-    modalCloseBtn.addEventListener("click" , closeModal);
+
 
     modal.addEventListener ("click" , (event) => {
-        if(event.target === modal) {
+        if(event.target === modal || event.target.getAttribute('data-close') == '') {
             closeModal();
         }
     });
@@ -127,7 +126,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const modalTimerId = setTimeout(openModal , 3000);
+    const modalTimerId = setTimeout(openModal , 50000);
 
     function showModalByScroll() {
         if(window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight){
@@ -206,4 +205,111 @@ window.addEventListener('DOMContentLoaded', () => {
         "post" , 
         ".menu .container",
         'menu__item').render();
+
+        //forms
+
+        const forms = document.querySelectorAll('form');
+
+        const message = {
+            loading:'img/form/spinner.svg' ,
+            sucsess: "Спасибо,скоро мы с вами свяжемся" ,
+            failure: "Что-то пошло не так"
+        };
+
+        forms.forEach(item => {
+            postData(item);
+        });
+
+        function postData(form){
+            form.addEventListener("submit" , (event) => {
+                event.preventDefault();
+
+                const statusMesage = document.createElement('img');
+                statusMesage.src = message.loading;
+                statusMesage.style.cssText= `
+                display:block;
+                margin: 0 auto; 
+                `;
+                form.insertAdjacentElement('afterend' , statusMesage);
+
+                
+
+                // const request = new XMLHttpRequest();
+                // request.open('POST' , 'server.php');
+                //request.setRequestHeader('Content-type' , 'multipart/form-data');
+                //Когда идёт связка XMLHttpRequest и FormData нам заголовок устанавливать НЕ НУЖНО(НЕЛЬЗЯ)
+
+                const formData = new FormData(form); //создаём формДату(альтернатива JSON)
+
+                const object = {};
+                formData.forEach(function(value,key){
+                    object[key] = value;
+                });
+                // request.send(formData);
+                fetch('server.php' , {
+                    method:"POST" ,
+                    headers: {
+                        'content-type' : 'aplication/json'
+                    },
+                    body: JSON.stringify(object)
+                }).then(data => data.text())
+                .then(data => {
+                    console.log(data);
+                    showThanksModal(message.sucsess);
+                    form.reset();
+                    statusMesage.remove();
+                }).catch(()=>{   //не рабоатет с ошибками HTTP протокола
+                    showThanksModal(message.failure);
+                }).finally(() => {
+                    form.reset();
+                });
+
+                // request.addEventListener("load" , () => {
+                //     if (request.status === 200){
+                //         console.log(request.response);
+                //         showThanksModal(message.sucsess);
+                //         form.reset();
+                //         statusMesage.remove();
+                //     } else {
+                //         showThanksModal(message.failure);
+                //     }
+                // });
+                
+            });
+        }
+        function showThanksModal(message) {
+            const prevModalDialog = document.querySelector('.modal__dialog');
+
+            prevModalDialog.classList.add('hide');
+            prevModalDialog.classList.remove('show');
+            openModal();
+
+            const thanksModal = document.createElement('div');
+            thanksModal.classList.add('modal__dialog');
+            thanksModal.innerHTML = `
+                <div class="modal__content">
+                    <div class="modal__close data-close">×</div>
+                    <div class="modal__title">${message}</div>
+                </div>
+            `;
+
+            document.querySelector(".modal").append(thanksModal);
+            setTimeout(()=> {
+                thanksModal.remove();
+                prevModalDialog.classList.add('show');
+                prevModalDialog.classList.remove('hide');
+                closeModal();
+
+            }, 4000);
+        }
+
+        // fetch('https://jsonplaceholder.typicode.com/posts' , {
+        //     method: "POST",
+        //     body: JSON.stringify({name:"Alex"}),                //Post
+        //     headers:{
+        //         'content-type' : 'aplication/json'
+        //     }
+        // })//объект настроек
+        // .then(response => response.json())                       //Get 
+        // .then(json => console.log(json));
 }); 
