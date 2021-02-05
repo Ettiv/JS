@@ -1,4 +1,6 @@
 /node_modules
 /Шаблоны/es6Modules/node_modules
-/Шаблоны/ComanJS/node_modules
+/Шаблоны/ComanJS/node_modules  
 /038Food-dist/node_modules
+/Шаблоны/jquery/node_modules
+/Шаблоны/usingReadyCode/node_modules

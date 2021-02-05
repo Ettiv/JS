@@ -1,0 +1,5 @@
+Реакт:
+-JSX
+-babel
+-webpack
+-react

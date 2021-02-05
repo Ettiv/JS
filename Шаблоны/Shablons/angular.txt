@@ -1,0 +1,6 @@
+Ангуляр:
+-node.js
+-TypeScript
+-webpack
+-MVC pattern
+-Angular
